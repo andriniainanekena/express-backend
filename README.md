@@ -1,8 +1,6 @@
-# Express Backend
+# Express Backend + React Frontend
 
-This is a simple Express.js backend for managing a list of characters.
-
-## Getting Started
+This project is a simple character management app with an Express.js backend and a React frontend using Vite.
 
 ### Prerequisites
 
@@ -15,25 +13,47 @@ This is a simple Express.js backend for managing a list of characters.
    ```sh
    git clone https://github.com/your-username/express-backend.git
    ```
-2. Install the dependencies:
+2. Install backend dependencies and start the server:
    ```sh
+   cd backend
    npm install
+   node server.js
    ```
+3. In a new terminal, install frontend dependencies and start the React app:
+   ```sh
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   
+The backend API runs on port 3001 and the frontend on port 5173.
 
-### Running the Server
+### Features
+Backend API Endpoints
 
-To start the server, run the following command:
+    GET /characters: Get all characters
 
-```sh
-node server.js
-```
+    GET /characters/:id: Get a character by ID
 
-The server will start on port 3001.
+    GET /characters/search?name=: Search characters by name (case-insensitive)
 
-## API Endpoints
+    POST /characters: Add a new character
 
-* **GET /characters**: Get all characters.
-* **GET /characters/:id**: Get a character by ID.
-* **POST /characters**: Create a new character.
-* **PUT /characters/:id**: Update a character by ID.
-* **DELETE /characters/:id**: Delete a character by ID.
+    PUT /characters/:id: Update a character by ID
+
+    DELETE /characters/:id: Delete a character by ID
+
+The backend reads and writes data to user.json and uses CORS to allow frontend requests.
+Frontend
+
+    Displays a list of characters with name, real name, and universe
+
+    Search bar to filter characters by name
+
+    Form to add new characters
+
+    Buttons to edit and delete existing characters
+
+    Loading and error handling states
+
+    Pure CSS styling for simplicity
