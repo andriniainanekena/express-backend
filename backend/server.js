@@ -1,10 +1,12 @@
 const express = require("express");
 const fs = require("fs").promises;
 const path = require("path");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3001;
 
+app.use(cors());
 app.use(express.json());
 
 const dataFilePath = path.join(__dirname, "user.json");
@@ -27,6 +29,16 @@ async function writeData(data) {
   }
 }
 
+app.get("/characters/search", async (req, res) => {
+  const { name } = req.query;
+  if (!name) return res.status(400).json({ error: "Query parameter 'name' is required" });
+  const data = await readData();
+  const filtered = data.characters.filter((c) =>
+    c.name.toLowerCase().includes(name.toLowerCase())
+  );
+  res.json(filtered);
+});
+
 app.get("/characters", async (req, res) => {
   const data = await readData();
   res.json(data.characters);
@@ -37,16 +49,6 @@ app.get("/characters/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const character = data.characters.find((c) => c.id === id);
   character ? res.json(character) : res.status(404).json({ error: "Character not found" });
-});
-
-app.get("/characters/search", async (req, res) => {
-  const { name } = req.query;
-  if (!name) return res.status(400).json({ error: "Query parameter 'name' is required" });
-  const data = await readData();
-  const filtered = data.characters.filter((c) =>
-    c.name.toLowerCase().includes(name.toLowerCase())
-  );
-  res.json(filtered);
 });
 
 app.post("/characters", async (req, res) => {
