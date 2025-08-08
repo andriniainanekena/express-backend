@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 export default function App() {
   const [characters, setCharacters] = useState([])
+  const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -9,7 +10,8 @@ export default function App() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/characters')
+      const url = search ? `/characters/search?name=${encodeURIComponent(search)}` : '/characters'
+      const res = await fetch(url)
       if (!res.ok) throw new Error('Failed to fetch characters')
       const data = await res.json()
       setCharacters(data)
@@ -22,11 +24,19 @@ export default function App() {
 
   useEffect(() => {
     fetchCharacters()
-  }, [])
+  }, [search])
 
   return (
     <div className="container">
       <h1>Characters</h1>
+
+      <input
+        type="text"
+        placeholder="Search characters by name..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        className="search-input"
+      />
 
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
