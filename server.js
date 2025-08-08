@@ -39,16 +39,16 @@ app.get("/characters/:id", async (req, res) => {
   character ? res.json(character) : res.status(404).json({ error: "Character not found" });
 });
 
-app.post("/characters", (req, res) => {
-  const data = readData();
-  const newCharacter = req.body;
-  if (!newCharacter.name || !newCharacter.realName || !newCharacter.universe) {
+app.post("/characters", async (req, res) => {
+  const data = await readData();
+  const { name, realName, universe } = req.body;
+  if (!name || !realName || !universe) {
     return res.status(400).json({ error: "Missing required fields" });
   }
   const maxId = data.characters.reduce((max, c) => (c.id > max ? c.id : max), 0);
-  newCharacter.id = maxId + 1;
+  const newCharacter = { id: maxId + 1, name, realName, universe };
   data.characters.push(newCharacter);
-  writeData(data);
+  await writeData(data);
   res.status(201).json(newCharacter);
 });
 
