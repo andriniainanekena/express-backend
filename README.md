@@ -29,7 +29,7 @@ This project is a simple character management app with an Express.js backend and
 The backend API runs on port 3001 and the frontend on port 5173.
 
 ### Features
-Backend API Endpoints
+   Backend API Endpoints :
 
     GET /characters: Get all characters
 
@@ -43,8 +43,9 @@ Backend API Endpoints
 
     DELETE /characters/:id: Delete a character by ID
 
-The backend reads and writes data to user.json and uses CORS to allow frontend requests.
-Frontend
+The backend reads and writes data to user.json.
+
+   Frontend :
 
     Displays a list of characters with name, real name, and universe
 
