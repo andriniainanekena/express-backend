@@ -39,6 +39,16 @@ app.get("/characters/:id", async (req, res) => {
   character ? res.json(character) : res.status(404).json({ error: "Character not found" });
 });
 
+app.get("/characters/search", async (req, res) => {
+  const { name } = req.query;
+  if (!name) return res.status(400).json({ error: "Query parameter 'name' is required" });
+  const data = await readData();
+  const filtered = data.characters.filter((c) =>
+    c.name.toLowerCase().includes(name.toLowerCase())
+  );
+  res.json(filtered);
+});
+
 app.post("/characters", async (req, res) => {
   const data = await readData();
   const { name, realName, universe } = req.body;
