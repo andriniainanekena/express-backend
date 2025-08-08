@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 export default function App() {
   const [characters, setCharacters] = useState([])
   const [search, setSearch] = useState('')
+  const [form, setForm] = useState({ name: '', realName: '', universe: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -26,6 +27,26 @@ export default function App() {
     fetchCharacters()
   }, [search])
 
+  async function handleAdd(e) {
+    e.preventDefault()
+    if (!form.name || !form.realName || !form.universe) {
+      alert('Please fill all fields')
+      return
+    }
+    try {
+      const res = await fetch('/characters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error('Failed to add character')
+      setForm({ name: '', realName: '', universe: '' })
+      fetchCharacters()
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+
   return (
     <div className="container">
       <h1>Characters</h1>
@@ -48,6 +69,29 @@ export default function App() {
           </li>
         ))}
       </ul>
+
+      <h2>Add Character</h2>
+      <form onSubmit={handleAdd} className="add-form">
+        <input
+          placeholder="Name"
+          value={form.name}
+          onChange={e => setForm({ ...form, name: e.target.value })}
+          className="form-input"
+        />
+        <input
+          placeholder="Real Name"
+          value={form.realName}
+          onChange={e => setForm({ ...form, realName: e.target.value })}
+          className="form-input"
+        />
+        <input
+          placeholder="Universe"
+          value={form.universe}
+          onChange={e => setForm({ ...form, universe: e.target.value })}
+          className="form-input"
+        />
+        <button type="submit" className="btn-submit">Add Character</button>
+      </form>
     </div>
   )
 }
