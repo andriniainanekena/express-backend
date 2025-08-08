@@ -5,6 +5,8 @@ export default function App() {
   const [characters, setCharacters] = useState([])
   const [search, setSearch] = useState('')
   const [form, setForm] = useState({ name: '', realName: '', universe: '' })
+  const [editingId, setEditingId] = useState(null)
+  const [editForm, setEditForm] = useState({ name: '', realName: '', universe: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -48,6 +50,48 @@ export default function App() {
     }
   }
 
+  function startEdit(character) {
+    setEditingId(character.id)
+    setEditForm({ name: character.name, realName: character.realName, universe: character.universe })
+  }
+
+  function cancelEdit() {
+    setEditingId(null)
+    setEditForm({ name: '', realName: '', universe: '' })
+  }
+
+  async function handleEdit(e) {
+    e.preventDefault()
+    if (!editForm.name || !editForm.realName || !editForm.universe) {
+      alert('Please fill all fields in edit form')
+      return
+    }
+    try {
+      const res = await fetch(`/characters/${editingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editForm),
+      })
+      if (!res.ok) throw new Error('Failed to update character')
+      setEditingId(null)
+      setEditForm({ name: '', realName: '', universe: '' })
+      fetchCharacters()
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+
+  async function handleDelete(id) {
+    if (!window.confirm('Are you sure you want to delete this character?')) return
+    try {
+      const res = await fetch(`/characters/${id}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed to delete character')
+      fetchCharacters()
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+
   return (
     <div className="container">
       <h1>Characters</h1>
@@ -66,7 +110,40 @@ export default function App() {
       <ul className="characters-list">
         {characters.map(c => (
           <li key={c.id} className="character-item">
-            <strong>{c.name}</strong> ({c.realName}) — {c.universe}
+            {editingId === c.id ? (
+              <form onSubmit={handleEdit} className="edit-form">
+                <input
+                  className="form-input"
+                  value={editForm.name}
+                  onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                  placeholder="Name"
+                />
+                <input
+                  className="form-input"
+                  value={editForm.realName}
+                  onChange={e => setEditForm({ ...editForm, realName: e.target.value })}
+                  placeholder="Real Name"
+                />
+                <input
+                  className="form-input"
+                  value={editForm.universe}
+                  onChange={e => setEditForm({ ...editForm, universe: e.target.value })}
+                  placeholder="Universe"
+                />
+                <button type="submit" className="btn-submit">Save</button>
+                <button type="button" onClick={cancelEdit} style={{ marginLeft: 8 }}>Cancel</button>
+              </form>
+            ) : (
+              <>
+                <div className="character-info">
+                  <strong>{c.name}</strong> ({c.realName}) — {c.universe}
+                </div>
+                <div className="buttons-group">
+                  <button className="btn-edit" onClick={() => startEdit(c)}>Edit</button>
+                  <button className="btn-delete" onClick={() => handleDelete(c.id)}>Delete</button>
+                </div>
+              </>
+            )}
           </li>
         ))}
       </ul>
