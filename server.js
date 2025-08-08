@@ -52,16 +52,14 @@ app.post("/characters", async (req, res) => {
   res.status(201).json(newCharacter);
 });
 
-app.put("/characters/:id", (req, res) => {
-  const data = readData();
+app.put("/characters/:id", async (req, res) => {
+  const data = await readData();
   const id = parseInt(req.params.id);
   const index = data.characters.findIndex((c) => c.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: "Character not found" });
-  }
+  if (index === -1) return res.status(404).json({ error: "Character not found" });
   const updatedCharacter = { ...data.characters[index], ...req.body, id };
   data.characters[index] = updatedCharacter;
-  writeData(data);
+  await writeData(data);
   res.json(updatedCharacter);
 });
 
