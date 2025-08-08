@@ -27,21 +27,16 @@ async function writeData(data) {
   }
 }
 
-app.get("/characters", (req, res) => {
-  const data = readData();
-  res.setHeader("Content-Type", "application/json");
-  res.send(JSON.stringify(data.characters, null, 2));
+app.get("/characters", async (req, res) => {
+  const data = await readData();
+  res.json(data.characters);
 });
 
-app.get("/characters/:id", (req, res) => {
-  const data = readData();
+app.get("/characters/:id", async (req, res) => {
+  const data = await readData();
   const id = parseInt(req.params.id);
   const character = data.characters.find((c) => c.id === id);
-  if (character) {
-    res.json(character);
-  } else {
-    res.status(404).json({ error: "Character not found" });
-  }
+  character ? res.json(character) : res.status(404).json({ error: "Character not found" });
 });
 
 app.post("/characters", (req, res) => {
