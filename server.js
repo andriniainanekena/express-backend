@@ -19,8 +19,12 @@ async function readData() {
   }
 }
 
-function writeData(data) {
-  fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2));
+async function writeData(data) {
+  try {
+    await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error("Error writing JSON:", error);
+  }
 }
 
 app.get("/characters", (req, res) => {
