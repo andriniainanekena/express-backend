@@ -54,6 +54,4 @@ Frontend
 
     Buttons to edit and delete existing characters
 
-    Loading and error handling states
 
-    Pure CSS styling for simplicity
