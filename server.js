@@ -9,9 +9,14 @@ app.use(express.json());
 
 const dataFilePath = path.join(__dirname, "user.json");
 
-function readData() {
-  const jsonData = fs.readFileSync(dataFilePath);
-  return JSON.parse(jsonData.toString());
+async function readData() {
+  try {
+    const jsonData = await fs.readFile(dataFilePath, "utf-8");
+    return JSON.parse(jsonData);
+  } catch (error) {
+    console.error("Error reading JSON:", error);
+    return { characters: [] };
+  }
 }
 
 function writeData(data) {
