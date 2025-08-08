@@ -63,15 +63,13 @@ app.put("/characters/:id", async (req, res) => {
   res.json(updatedCharacter);
 });
 
-app.delete("/characters/:id", (req, res) => {
-  const data = readData();
+app.delete("/characters/:id", async (req, res) => {
+  const data = await readData();
   const id = parseInt(req.params.id);
   const index = data.characters.findIndex((c) => c.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: "Character not found" });
-  }
+  if (index === -1) return res.status(404).json({ error: "Character not found" });
   data.characters.splice(index, 1);
-  writeData(data);
+  await writeData(data);
   res.status(204).send();
 });
 
