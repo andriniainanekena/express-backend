@@ -1,58 +1,53 @@
 # Express Backend + React Frontend
 
-This project is a simple character management app with an Express.js backend and a React frontend using Vite.
+This project is a simple character management application with an **Express.js** backend and a **React** frontend using **Vite**.
 
-### Prerequisites
+## Prerequisites
 
-* Node.js
-* npm
+- **Node.js**
+- **npm**
 
-### Installation
+## Installation
 
-1. Clone the repository:
+1. **Clone the repository**:
    ```sh
    git clone https://github.com/your-username/express-backend.git
    ```
-2. Install backend dependencies and start the server:
+
+2. **Install backend dependencies and start the server**:
    ```sh
    cd backend
    npm install
    node server.js
    ```
-3. In a new terminal, install frontend dependencies and start the React app:
+
+3. **In a new terminal, install frontend dependencies and start the React app**:
    ```sh
    cd frontend
    npm install
    npm run dev
    ```
-   
-The backend API runs on port 3001 and the frontend on port 5173.
 
-### Features
-1. Backend API Endpoints :
+The backend API runs on `port 3001`, and the frontend runs on `port 5173`.
 
-    GET /characters: Get all characters
+## Features
 
-    GET /characters/:id: Get a character by ID
+### 1. Backend API Endpoints
 
-    GET /characters/search?name=: Search characters by name (case-insensitive)
+The Express.js backend provides the following API endpoints, with data stored in `user.json`:
 
-    POST /characters: Add a new character
+- **GET /characters**: Retrieve all characters.
+- **GET /characters/:id**: Retrieve a character by ID.
+- **GET /characters/search?name=**: Search characters by name (case-insensitive).
+- **POST /characters**: Add a new character.
+- **PUT /characters/:id**: Update a character by ID.
+- **DELETE /characters/:id**: Delete a character by ID.
 
-    PUT /characters/:id: Update a character by ID
+### 2. Frontend
 
-    DELETE /characters/:id: Delete a character by ID
+The React frontend includes the following features:
 
-The backend reads and writes data to user.json.
-
-2. Frontend :
-
-    Displays a list of characters with name, real name, and universe
-
-    Search bar to filter characters by name
-
-    Form to add new characters
-
-    Buttons to edit and delete existing characters
-
-
+- Displays a list of characters with their **name**, **real name**, and **universe**.
+- A **search bar** to filter characters by name.
+- A **form** to add new characters.
+- **Buttons** to edit and delete existing characters.
